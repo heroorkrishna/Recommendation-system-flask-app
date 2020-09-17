@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<!-- saved from url=(0060)https://select2.github.io/select2-bootstrap-theme/4.0.3.html -->
+<html class="demo">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <style class="anchorjs"></style>
+    <link rel="stylesheet" href="../static/scripts/bootstrap.min.css">
+    <link rel="stylesheet" href="../static/scripts/select2.min.css">
+    <link rel="stylesheet" href="../static/scripts/select2-bootstrap.css">
+    <link rel="stylesheet" href="../static/scripts/gh-pages.css">
+    <!--[if lt IE 9]>
+    <script src="//oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="js/respond.min.js"></script>
+    <![endif]-->
+
+
+    {#    Bootstrap#}
+    {#    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"#}
+    {#          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">#}
+    {##}
+    {#    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"#}
+    {#            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"#}
+    {#            crossorigin="anonymous"></script>#}
+    {#    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"#}
+    {#            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"#}
+    {#            crossorigin="anonymous"></script>#}
+    {#    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"#}
+    {#            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"#}
+    {#            crossorigin="anonymous"></script>#}
+
+    <script>(function () {
+        // injected DOM script is not a content script anymore,
+        // it can modify objects and functions of the page
+        var _pushState = history.pushState;
+        history.pushState = function (state, title, url) {
+            _pushState.call(this, state, title, url);
+            window.dispatchEvent(
+                new CustomEvent('state-changed', {detail: url})
+            );
+        };
+        // repeat the above for replaceState too
+    })();</script>
+    <script>(function () {
+        // injected DOM script is not a content script anymore,
+        // it can modify objects and functions of the page
+        var _pushState = history.pushState;
+        history.pushState = function (state, title, url) {
+            _pushState.call(this, state, title, url);
+            window.dispatchEvent(
+                new CustomEvent('state-changed', {detail: url})
+            );
+        };
+        // repeat the above for replaceState too
+    })();</script>
+    <script>(function () {
+        // injected DOM script is not a content script anymore,
+        // it can modify objects and functions of the page
+        var _pushState = history.pushState;
+        history.pushState = function (state, title, url) {
+            _pushState.call(this, state, title, url);
+            window.dispatchEvent(
+                new CustomEvent('state-changed', {detail: url})
+            );
+        };
+        // repeat the above for replaceState too
+    })();</script>
+</head>
+
+<body>
+<script type="text/javascript">
+    function searched() {
+        var arr = $('#multiple_dropdown').select2('data');
+        if (arr.length < 1) {
+            return
+
+        }
+
+        var selected_titles = {}
+        for (var i in arr) {
+            selected_titles[arr[i]['id']] = arr[i]['text']
+        }
+
+
+        $.post("/request", selected_titles)
+            .done(function (recom_lst) {
+                console.log(recom_lst)
+                $('#recom-results').empty();
+
+                for (idx in recom_lst) {
+                    console.log(recom_lst[idx][0] + ' ' + recom_lst[idx][1])
+
+                    $('#recom-results').append(`<a target="_blank" href="${recom_lst[idx][1]}" class="list-group-item align">
+                        <span class="image-parent right">
+                          <img src="${recom_lst[idx][2]}" class="img-fluid" alt="quixote">
+                      </span>
+                    <span>${recom_lst[idx][0]}
+                    <span>
+
+                    </a>`)
+                }
+            });
+
+    }
+
+
+</script>
+
+{# Top Header#}
+<header class="navbar navbar-default" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".bs-navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="https://github.com/nishan7/Recommender-Online">Recommender</a>
+        </div>
+
+        <ul class="nav navbar-nav navbar-right">
+            <li>
+                <a href="https://github.com/nishan7">
+                    <i class="fa fa-github"></i>
+                    GitHub
+                </a>
+            </li>
+        </ul>
+    </div>
+    </div>
+</header>
+
+{#Searh Bar AREA#}
+<div class="container text-center">
+    <h1 class="jumbotron-title" align="center">Select movies that you love ❤</h1>
+    <br>
+
+    <div class="form-group">
+        <select id="multiple_dropdown" data-placeholder="Select 3 or more movies"
+                class="form-control select2-multiple select2-hidden-accessible" multiple="" tabindex="-1"
+                aria-hidden="true">
+            {% for value, text in data %} }}
+                <option value="{{ value }}">{{ text }}</option>
+            {% endfor %}
+
+        </select>
+    </div>
+
+
+    <div>
+        <button type="button" class="btn btn-lg btn-primary" align="center" onClick="searched();">Recommend!!</button>
+    </div>
+    <br>
+    <div><h2 id="info"></h2></div>
+    <div class="list-group text-left" id="recom-results">
+    </div>
+
+
+</div>
+
+
+{#Bottom Footer#}
+<div class="footer">
+    <div class="container">
+        <ul class="footer-links">
+            {#            <li class="version"><span class="hidden-xs">Currently</span> v0.1.0-beta.10</li>#}
+            {#            <li>·</li>#}
+            <li><a href="https://github.com/nishan7/Recommender-Online">GitHub Link</a></li>
+            <li><a href="https://linkedlin.com/in/paudelnishan">LinkedIn Link</a></li>
+
+            {#            <li>·</li>#}
+        </ul>
+
+
+        <small>
+            {#            <a href="http://getbootstrap.com/">Bootstrap</a> is a front-end framework for fast, sleek, and mobile-first#}
+            {#            web development.<br>#}
+            {#            <a href="https://select2.github.io/"><img src="../static/scripts/logo.png"> Select2</a> is a jQuery based#}
+            {#            replacement for select boxes.#}
+        </small>
+    </div>
+</div>
+
+
+<script src="../static/scripts/jquery.min.js.download"></script>
+<script src="../static/scripts/select2.full.js.download"></script>
+
+<script src="../static/scripts/bootstrap.min.js.download"></script>
+<script src="../static/scripts/anchor.min.js.download"></script>
+<script>
+    anchors.options.placement = 'left';
+    anchors.add('.container h1, .container h2, .container h3, .container h4, .container h5');
+
+    // Set the "bootstrap" theme as the default theme for all Select2
+    // widgets.
+    //
+    // @see https://github.com/select2/select2/issues/2927
+    $.fn.select2.defaults.set("theme", "bootstrap");
+
+    var placeholder = "Select a State";
+
+    $(".select2-single, .select2-multiple").select2({
+        placeholder: placeholder,
+        width: null,
+        containerCssClass: ':all:'
+    });
+
+    $(".select2-allow-clear").select2({
+        allowClear: true,
+        placeholder: placeholder,
+        width: null,
+        containerCssClass: ':all:'
+    });
+
+    // @see https://select2.github.io/examples.html#data-ajax
+    function formatRepo(repo) {
+        if (repo.loading) return repo.text;
+
+        var markup = "<div class='select2-result-repository clearfix'>" +
+            "<div class='select2-result-repository__avatar'><img src='" + repo.owner.avatar_url + "' /></div>" +
+            "<div class='select2-result-repository__meta'>" +
+            "<div class='select2-result-repository__title'>" + repo.full_name + "</div>";
+
+        if (repo.description) {
+            markup += "<div class='select2-result-repository__description'>" + repo.description + "</div>";
+        }
+
+        markup += "<div class='select2-result-repository__statistics'>" +
+            "<div class='select2-result-repository__forks'><span class='glyphicon glyphicon-flash'></span> " + repo.forks_count + " Forks</div>" +
+            "<div class='select2-result-repository__stargazers'><span class='glyphicon glyphicon-star'></span> " + repo.stargazers_count + " Stars</div>" +
+            "<div class='select2-result-repository__watchers'><span class='glyphicon glyphicon-eye-open'></span> " + repo.watchers_count + " Watchers</div>" +
+            "</div>" +
+            "</div></div>";
+
+        return markup;
+    }
+
+    function formatRepoSelection(repo) {
+        return repo.full_name || repo.text;
+    }
+
+    $(".js-data-example-ajax").select2({
+        width: null,
+        containerCssClass: ':all:',
+        ajax: {
+            url: "https://api.github.com/search/repositories",
+            dataType: 'json',
+            delay: 250,
+            data: function (params) {
+                return {
+                    q: params.term, // search term
+                    page: params.page
+                };
+            },
+            processResults: function (data, params) {
+                // parse the results into the format expected by Select2
+                // since we are using custom formatting functions we do not need to
+                // alter the remote JSON data, except to indicate that infinite
+                // scrolling can be used
+                params.page = params.page || 1;
+
+                return {
+                    results: data.items,
+                    pagination: {
+                        more: (params.page * 30) < data.total_count
+                    }
+                };
+            },
+            cache: true
+        },
+        escapeMarkup: function (markup) {
+            return markup;
+        }, // let our custom formatter work
+        minimumInputLength: 1,
+        templateResult: formatRepo,
+        templateSelection: formatRepoSelection
+    });
+
+    $("button[data-select2-open]").click(function () {
+        $("#" + $(this).data("select2-open")).select2("open");
+    });
+
+    $(":checkbox").on("click", function () {
+        $(this).parent().nextAll("select").prop("disabled", !this.checked);
+    });
+
+    // copy Bootstrap validation states to Select2 dropdown
+    //
+    // add .has-waring, .has-error, .has-succes to the Select2 dropdown
+    // (was #select2-drop in Select2 v3.x, in Select2 v4 can be selected via
+    // body > .select2-container) if _any_ of the opened Select2's parents
+    // has one of these forementioned classes (YUCK! ;-))
+    $(".select2-single, .select2-multiple, .select2-allow-clear, .js-data-example-ajax").on("select2:open", function () {
+        if ($(this).parents("[class*='has-']").length) {
+            var classNames = $(this).parents("[class*='has-']")[0].className.split(/\s+/);
+
+            for (var i = 0; i < classNames.length; ++i) {
+                if (classNames[i].match("has-")) {
+                    $("body > .select2-container").addClass(classNames[i]);
+                }
+            }
+        }
+    });
+</script>
+
+
+</body>
+</html>

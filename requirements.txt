@@ -1,0 +1,6 @@
+requests==2.21.0
+requests_cache==0.5.2
+numpy==1.18.3
+reusables==0.9.5
+Flask==1.1.2
+gunicorn
